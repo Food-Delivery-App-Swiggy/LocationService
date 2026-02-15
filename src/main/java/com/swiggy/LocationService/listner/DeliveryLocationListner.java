@@ -19,7 +19,8 @@ public class DeliveryLocationListner {
 
     @KafkaListener(
             topics = "delivery-location-event",
-            groupId = "location-service"
+            groupId = "location-service",
+            containerFactory = "deliveryLocationKafkaListenerFactory"
     )
     public void saveLocation(DeliveryLocationEvent event) {
 
