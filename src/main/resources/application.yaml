@@ -1,12 +1,12 @@
 spring:
   application:
     name: LocationService
-    logging:
-      file:
-        name: logs/location-service.log
-      level:
-        root: INFO
-        com.swiggy: DEBUG
+logging:
+  file:
+    name: logs/location-service.log
+  level:
+    root: INFO
+    com.swiggy: DEBUG
 
   kafka:
     listener:
