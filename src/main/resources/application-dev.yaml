@@ -1,12 +1,6 @@
 spring:
   application:
     name: LocationService
-logging:
-  file:
-    name: logs/location-service.log
-  level:
-    root: INFO
-    com.swiggy: DEBUG
 
   kafka:
     listener:
@@ -34,7 +28,12 @@ logging:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-
+logging:
+  file:
+    name: logs/location-service.log
+  level:
+    root: INFO
+    com.swiggy: DEBUG
 server:
   port: 8092
 
