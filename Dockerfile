@@ -18,8 +18,8 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # Run as a dedicated non-root application user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
+#RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+#USER appuser
 
 # Copy generated JAR from builder stage
 COPY --from=builder /app/build/libs/*SNAPSHOT.jar app.jar
@@ -27,6 +27,6 @@ COPY --from=builder /app/build/libs/*SNAPSHOT.jar app.jar
 # COPY --from=builder /app/build/libs/*.jar app.jar
 
 # LocationService port (update if configured differently in application.yml, e.g., 8082)
-EXPOSE 8080
+EXPOSE 9092
 
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
