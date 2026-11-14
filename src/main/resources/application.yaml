@@ -38,6 +38,9 @@ logging:
     com.swiggy: DEBUG
 server:
   port: 8092
+security:
+  jwt:
+    secret: Cmj+EboFg6jB3LPFT9H67wS/wzUKNz1dXD1ywfa0oZQ=
 
 eureka:
   client:
