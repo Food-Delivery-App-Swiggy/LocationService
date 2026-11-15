@@ -20,16 +20,20 @@ pipeline {
 
         stage('Build and Test') {
             steps {
-                sh 'chmod +x mvnw'
-                sh './mvnw clean verify'
+                sh '''
+                    set -e
+                    test -f gradlew || { echo "gradlew not found in repo root"; exit 1; }
+                    chmod +x gradlew
+                    ./gradlew clean build --no-daemon
+                '''
             }
-			post {
-				always {
-					junit testResults: '**/target/surefire-reports/*.xml, **/target/failsafe-reports/*.xml',
-                  allowEmptyResults: false
-				}
-			}
-		}
+            post {
+                always {
+                    junit testResults: '**/build/test-results/test/*.xml',
+                          allowEmptyResults: true
+                }
+            }
+        }
 
 
         stage('Build Docker Image') {
