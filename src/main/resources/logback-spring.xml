@@ -7,7 +7,7 @@
     <!-- Base folder. Override with env var or -DLOG_BASE_DIR=... if needed -->
     <property name="LOG_BASE_DIR_SUSHANT" value="${LOG_BASE_DIR:-C:\Myfiles\logs}"/>
     <property name="LOG_BASE_DIR" value="${LOG_BASE_DIR:-E:/logs}"/>
-    <property name="LOG_DIR" value="${LOG_BASE_DIR}/${APP_NAME}"/>
+    <property name="LOG_DIR" value="${LOG_BASE_DIR_SUSHANT}/${APP_NAME}"/>
 
     <!-- Console (readable) -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
