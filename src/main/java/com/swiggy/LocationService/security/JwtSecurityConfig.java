@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,37 +44,45 @@ public class JwtSecurityConfig {
     }
 
     @Bean
-    public Converter<Jwt, ? extends AbstractAuthenticationToken> jwtAuthenticationConverter() {
+    public Converter<Jwt,AbstractAuthenticationToken> jwtAuthenticationConverter() {
 
-        return jwt -> {
-            List<String> roles = jwt.getClaimAsStringList("roles");
+        return new Converter<Jwt, AbstractAuthenticationToken>() {
+            @Override
+            public AbstractAuthenticationToken convert(Jwt jwt) {
 
-            Collection<GrantedAuthority> authorities =
-                    roles == null ? List.of() :
-                            roles.stream()
-                                    .map(role -> new SimpleGrantedAuthority(
-                                            role.startsWith("ROLE_")
-                                                    ? role
-                                                    : "ROLE_" + role))
-                                    .map(GrantedAuthority.class::cast)
-                                    .toList();
+                List<String> roles = jwt.getClaimAsStringList("roles");
 
-            return new JwtAuthenticationToken(
-                    jwt, authorities, jwt.getSubject());
+                Collection<GrantedAuthority> authorities =
+                        roles == null
+                                ? List.of()
+                                : roles.stream()
+                                .map(role -> new SimpleGrantedAuthority(
+                                        role.startsWith("ROLE_")
+                                                ? role
+                                                : "ROLE_" + role))
+                                .map(GrantedAuthority.class::cast)
+                                .toList();
+
+                return new JwtAuthenticationToken(
+                        jwt, authorities, jwt.getSubject());
+            }
         };
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity http, Converter<Jwt,
-                    ? extends AbstractAuthenticationToken> jwtAuthenticationConverter) throws Exception {
+            HttpSecurity http, Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter) throws Exception {
 
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/auth/register").permitAll()
+                        .requestMatchers("/internal/users/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(
