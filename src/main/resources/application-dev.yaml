@@ -5,8 +5,8 @@ spring:
   kafka:
     listener:
       ack-mode: manual
-    bootstrap-servers: localhost:9092
-    #bootstrap-servers: kafka:9092
+    #bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:9092
 
     consumer:
       key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
@@ -17,8 +17,8 @@ spring:
         spring.json.trusted.packages: "*"
 
   datasource:
-    url: jdbc:mysql://localhost:3306/deliverylocations
-    #url: jdbc:mysql://mysql-db:3306/deliverylocations
+    #url: jdbc:mysql://localhost:3306/deliverylocations
+    url: jdbc:mysql://mysql-db:3306/deliverylocations
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -45,7 +45,7 @@ security:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-      #defaultZone: http://eureka-server:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
